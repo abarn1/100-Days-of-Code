@@ -21,3 +21,27 @@ user_1 = User('001', 'angela')
 user_2 = User('002', 'bob')
 
 user_1.follow(user_2)
+print(user_1.following)
+
+# following is the question class usage
+
+from question_model import Question
+from data import question_data
+from quiz_brain import brain
+
+# creates a list for the question files
+q_bank = []
+# appends the data from the data file and creates question objects
+for question in question_data:
+    q_bank.append(Question(question['text'], question['answer']))
+# creates the quiz using the quiz_brain class
+quiz = brain(q_bank)
+# while there are still questions run the quiz checking by using the still_has_questions method
+while quiz.still_has_questions():
+    # uses the next_question method in the quiz object to move onto the next quiz
+    quiz.next_question()
+print('You have finished the quiz')
+print(f"You ended with a score of {quiz.score}/{quiz.question_number}")
+
+# can I now change the data file to refer to the api at the trivia quiz database
+# https://opentdb.com/

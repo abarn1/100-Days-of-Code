@@ -1,0 +1,91 @@
+from turtle import Turtle, Screen
+import random
+
+def dashed_line(t, length, gap):
+    for i in range(length):
+        t.fd(10)
+        t.pu()
+        t.fd(gap)
+        t.pd()
+
+def choose_color():
+    return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+
+def draw_shape(t, num_sides, side_length):
+    screen.colormode(255)
+    t.color(choose_color())
+    for i in range(num_sides):
+        t.fd(side_length)
+        t.right(360/num_sides)
+
+
+def random_walk(t, num_steps):
+    screen.colormode(255)
+    for i in range(num_steps):
+        t.color(choose_color())
+        t.fd(50)
+        t.setheading(random.choice([0, 90, 180, 270]))
+
+def draw_spirograph(t, radius, num_circles):
+    screen.colormode(255)
+    for i in range(num_circles):
+        t.color(choose_color())
+        t.circle(radius)
+        t.left(360/num_circles)
+    
+        
+timmy = Turtle()
+screen = Screen()
+
+timmy.shape("turtle")
+timmy.color("red")
+timmy.speed(10)
+timmy.forward(100)
+
+#draw a square
+timmy.left(90)
+timmy.forward(100)
+timmy.left(90)
+timmy.forward(100)
+timmy.left(90)
+timmy.forward(100)
+timmy.left(90)
+
+screen.resetscreen()
+timmy.home()
+timmy.speed(10)
+timmy.shape("turtle")
+timmy.color("blue")
+dashed_line(timmy, 10, 5)
+
+screen.resetscreen()
+timmy.home()
+
+timmy.shape("turtle")
+timmy.speed(10)
+
+draw_shape(timmy, 3, 100)
+draw_shape(timmy, 4, 100)
+draw_shape(timmy, 5, 100)
+draw_shape(timmy, 6, 100)
+draw_shape(timmy, 7, 100)
+draw_shape(timmy, 8, 100)
+draw_shape(timmy, 9, 100)
+draw_shape(timmy, 10, 100)
+
+screen.resetscreen()
+
+timmy.pensize(10)
+timmy.shape("turtle")
+timmy.speed(10)
+
+random_walk(timmy, 50)
+
+screen.resetscreen()
+
+timmy.speed(10)
+
+draw_spirograph(timmy, 50, 50)
+
+screen.exitonclick()

@@ -2,7 +2,6 @@ from turtle import Screen
 from snake import Snake
 import time
 
-from Day20.snake_game.snake import snake
 
 screen = Screen()
 screen.setup(width=600, height=600)

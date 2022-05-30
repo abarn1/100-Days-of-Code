@@ -1,6 +1,6 @@
-from turtle import Turtle, Screen
-import time
+from turtle import Screen
 from snake import Snake
+import time
 
 from Day20.snake_game.snake import snake
 

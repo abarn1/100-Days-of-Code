@@ -11,14 +11,18 @@ screen.tracer(0)
 
 
 snake = Snake()
-
+screen.listen()
+screen.onkey(snake.move_left, "Left")
+screen.onkey(snake.move_right, "Right")
+screen.onkey(snake.move_up, "Up")
+screen.onkey(snake.move_down, "Down")
 
 screen.update()
 
 is_alive = True
 
 while is_alive:
-    time.sleep(0.1)
+    time.sleep(0.05)
     screen.update()
     snake.move()
 

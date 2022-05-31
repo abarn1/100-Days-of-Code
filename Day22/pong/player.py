@@ -1,16 +1,20 @@
-from turtle import Turtle
+from turtle import Turtle, position
 
-class Player():
-
-    def __init__(self, player_number):
+class Player(Turtle):
+    def __init__(self, position):
         super().__init__()
-        self.player_number = player_number
-        self.segments = []
+        self.create_player(position)
     
-    def create_player():
-        for i in range(4):
-            self.segments.append(Turtle("square"))
-            self.segments[i].color("white")
-            self.segments[i].penup()
-            self.segments[i].speed("fastest")
-            self.segments[i].goto(self.xcor(), self.ycor() + 20 * i)
+    def create_player(self, position):
+        self.shape("square")
+        self.color("white")
+        self.penup()
+        self.shapesize(stretch_wid=1, stretch_len=5)
+        self.goto(position)
+        self.setheading(90)
+    
+    def move_up(self):
+        self.forward(20)
+    
+    def move_down(self):
+        self.backward(20)

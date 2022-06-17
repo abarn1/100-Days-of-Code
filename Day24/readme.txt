@@ -1,0 +1,1 @@
+Started out making edits to the snake game from Day20-21 allowing for a high_score

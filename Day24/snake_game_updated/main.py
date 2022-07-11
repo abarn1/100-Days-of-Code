@@ -39,7 +39,8 @@ while is_alive:
     
     # Detect collision with border
     if snake.head.xcor() > 300 or snake.head.xcor() < -300 or snake.head.ycor() > 300 or snake.head.ycor() < -300:
-        scoreboard.game_over()
+        scoreboard.reset()
+        snake.reset()
 
     # Detect collision with itself
     for segment in snake.segments[1:]:

@@ -13,6 +13,7 @@ num_correct = 0
 num_incorrect = 0
 previously_guesed = []
 running = True
+state_names = state_data['state'].tolist()
 
 def draw_state(state):
     x = int(state_data.loc[state_data['state'] == state]['x'])
@@ -21,17 +22,23 @@ def draw_state(state):
     state_turtle.up()
     state_turtle.goto(x, y)
     state_turtle.write(state)
-    state_turtle.goto(0, 0)
 
     
 while running:
     answer_state = screen.textinput(title=f"{len(previously_guesed)}/50 Guess the State", prompt="What is the name of a State?")
     answer_state = answer_state.title()
-    if answer_state in state_data['state'].values and answer_state not in previously_guesed:
+    if answer_state in state_names and answer_state not in previously_guesed:
+        state_names.remove(answer_state)
         previously_guesed.append(answer_state)
         draw_state(answer_state)
         if len(previously_guesed) == 50:
             running = False
+    if answer_state == "Exit":
+        break
+
+
+state_data[state_data['state'].isin(state_names)].to_csv('./Day25/us-states-game-start/states_to_learn.csv')
+
 
 """
 use the following code to get the x and y values for the states on the image

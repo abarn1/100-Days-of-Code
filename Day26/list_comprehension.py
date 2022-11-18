@@ -7,3 +7,11 @@ names = ["John", "Bob", "Mary", "Jane", "Jack", "Tom", "Jerry", "Harry", "Joe", 
 short_names = [name for name in names if len(name) < 5]
 long_upper = [name.upper() for name in names if len(name) > 5]
 print(long_upper)
+# Squaring numbers
+numbers = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+squared_numbers = [n * n for n in numbers]
+print(f"Unsquared = {numbers}\nSquared = {squared_numbers}")
+
+# Filtering Even numbers
+filtered_numbers = [n for n in numbers if n % 2 == 0]
+print(f"Unfiltered = {numbers}\nFiltered = {filtered_numbers}")

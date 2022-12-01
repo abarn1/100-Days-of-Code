@@ -61,17 +61,29 @@ def search():
     try:
         with open('data.json', 'r') as passwords:
             data = json.load(passwords)
-            data[search_item]
     except FileNotFoundError:
         messagebox.showinfo(title='No passwords',
                             message='There are no passwords saved yet')
-    except KeyError:
-        messagebox.showinfo(title='No password',
-                            message='There are no passwords for this website yet.')
     else:
-        messagebox.showinfo(title=search_item,
-                            message=f"email: {data[search_item]['email']}\n"
-                                    f"password: {data[search_item]['password']}")
+        if search_item in data:
+            messagebox.showinfo(title=search_item,
+                                message=f"email: {data[search_item]['email']}\n"
+                                f"password: {data[search_item]['password']}")
+        else:
+            messagebox.showinfo(title='No password',
+                                message='There are no passwords for this website yet.')
+
+    # my original method of completing this exercise. The issue is that I can easily use just an if else statement
+    # to catch the errors in the code. It is better to use an if else  statement over adding another exception as
+    # they are meant to be last ditch efforts in catching errors
+    #
+    # except KeyError:
+    #     messagebox.showinfo(title='No password',
+    #                         message='There are no passwords for this website yet.')
+    # else:
+    #     messagebox.showinfo(title=search_item,
+    #                         message=f"email: {data[search_item]['email']}\n"
+    #                                 f"password: {data[search_item]['password']}")
 
 
 # ---------------------------- UI SETUP ------------------------------- #

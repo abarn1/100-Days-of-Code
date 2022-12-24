@@ -1,113 +1,73 @@
+import json
+from math import floor
 import requests
+from question_model import *
+import itertools
 
 parameters = {
-    "amount": 10,
-    "type": 'boolean'
+    "amount": 20,
+    "type": 'multiple',
+    "category": 11
 }
 
-response = requests.get("https://opentdb.com/api.php", params=parameters)
-response.raise_for_status()
-question_data = response.json()['results']
+q_types = {
+    "True/False": 'boolean',
+    "Multiple Choice": 'multiple'
+}
+categories_list = ["Film", "Science and Nature", "Sports", "Geography", "Celebrities", "Animals", "Math", "Television",
+                   "Gadgets", "Cartoon & Animation"]
+categories_dict = {
+    "Film": 11,
+    "Science and Nature": 17,
+    "Sports": 21,
+    "Geography": 22,
+    "Celebrities": 26,
+    "Animals": 27,
+    "Math": 19,
+    "Television": 14,
+    "Gadgets": 30,
+    "Cartoon & Animation": 32
+}
 
-# question_data = [
-#     {
-#         "category": "Science: Computers",
-#         "type": "boolean",
-#         "difficulty": "medium",
-#         "question": "The HTML5 standard was published in 2014.",
-#         "correct_answer": "True",
-#         "incorrect_answers": [
-#             "False"
-#         ]
-#     },
-#     {
-#         "category": "Science: Computers",
-#         "type": "boolean",
-#         "difficulty": "medium",
-#         "question": "The first computer bug was formed by faulty wires.",
-#         "correct_answer": "False",
-#         "incorrect_answers": [
-#             "True"
-#         ]
-#     },
-#     {
-#         "category": "Science: Computers",
-#         "type": "boolean",
-#         "difficulty": "medium",
-#         "question": "FLAC stands for 'Free Lossless Audio Condenser'.",
-#         "correct_answer": "False",
-#         "incorrect_answers": [
-#             "True"
-#         ]
-#     },
-#     {
-#         "category": "Science: Computers",
-#         "type": "boolean",
-#         "difficulty": "medium",
-#         "question": "All program codes have to be compiled into an executable file in order to be run. This file can then be executed on any machine.",
-#         "correct_answer": "False",
-#         "incorrect_answers": [
-#             "True"
-#         ]
-#     },
-#     {
-#         "category": "Science: Computers",
-#         "type": "boolean",
-#         "difficulty": "easy",
-#         "question": "Linus Torvalds created Linux and Git.",
-#         "correct_answer": "True",
-#         "incorrect_answers": [
-#             "False"
-#         ]
-#     },
-#     {
-#         "category": "Science: Computers",
-#         "type": "boolean",
-#         "difficulty": "easy",
-#         "question": "The programming language 'Python' is based off a modified version of 'JavaScript'",
-#         "correct_answer": "False",
-#         "incorrect_answers": [
-#             "True"
-#         ]
-#     },
-#     {
-#         "category": "Science: Computers",
-#         "type": "boolean",
-#         "difficulty": "medium",
-#         "question": "AMD created the first consumer 64-bit processor.",
-#         "correct_answer": "True",
-#         "incorrect_answers": [
-#             "False"
-#         ]
-#     },
-#     {
-#         "category": "Science: Computers",
-#         "type": "boolean",
-#         "difficulty": "easy",
-#         "question": "'HTML' stands for Hypertext Markup Language.",
-#         "correct_answer": "True",
-#         "incorrect_answers": [
-#             "False"
-#         ]
-#     },
-#     {
-#         "category": "Science: Computers",
-#         "type": "boolean",
-#         "difficulty": "easy",
-#         "question": "In most programming languages, the operator ++ is equivalent to the statement '+= 1'.",
-#         "correct_answer": "True",
-#         "incorrect_answers": [
-#             "False"
-#         ]
-#     },
-#     {
-#         "category": "Science: Computers",
-#         "type": "boolean",
-#         "difficulty": "hard",
-#         "question": "The IBM PC used an Intel 8008 microprocessor clocked at 4.77 MHz and 8 kilobytes of memory.",
-#         "correct_answer": "False",
-#         "incorrect_answers": [
-#             "True"
-#         ]
-#     }
-# ]
+def get_data(q_type, number, categories):
+    per_category = floor(number/len(categories))
+    raw_questions = []
+    if q_type == 1:
+        parameters['type'] = 'multiple'
+        for category in categories:
+            raw_questions.append(multiple_choice_data(per_category, category))
+        list_of_questions = list(itertools.chain.from_iterable(raw_questions))
+    else:
+        parameters['type'] = 'boolean'
+        for category in categories:
+            raw_questions.append(true_false_data(per_category, category))
+        list_of_questions = list(itertools.chain.from_iterable(raw_questions))
+    return list_of_questions
+def request_data(number, category):
+    parameters['amount'] = number
+    parameters['category'] = categories_dict[category]
+    response = requests.get("https://opentdb.com/api.php", params=parameters)
+    response.raise_for_status()
+    return response.json()['results']
+def multiple_choice_data(number, category):
+    question_bank = []
+    question_data = request_data(number, category)
+    for question in question_data:
+        question_text = question["question"]
+        correct_answer = question["correct_answer"]
+        incorrect_answers = question["incorrect_answers"]
+        new_question = MCQuestion(question_text, correct_answer, incorrect_answers)
+        question_bank.append(new_question)
+    return question_bank
+
+
+def true_false_data(number, category):
+    question_bank = []
+    question_data = request_data(number, category)
+    for question in question_data:
+        question_text = question["question"]
+        question_answer = question["correct_answer"]
+        new_question = TFQuestion(question_text, question_answer)
+        question_bank.append(new_question)
+    return question_bank
+

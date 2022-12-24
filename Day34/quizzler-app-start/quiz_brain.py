@@ -14,17 +14,37 @@ class QuizBrain:
     def next_question(self):
         self.current_question = self.question_list[self.question_number]
         self.question_number += 1
-        question_text = html.unescape(self.current_question)
-        user_answer = input(f"Q.{self.question_number}: {question_text} (True/False): ")
-        self.check_answer(user_answer)
+        q_text = html.unescape(self.current_question.text)
+        return f"Q.{self.question_number}: {q_text}"
+        # user_answer = input(f"Q.{self.question_number}: {question_text} (True/False): ")
+        # self.check_answer(user_answer)
+    def mc_next_question(self):
+        self.current_question = self.question_list[self.question_number]
+        self.question_number += 1
+        q_text = html.unescape(self.current_question.text)
+        q_o1 = html.unescape(self.current_question.answer)
+        q_o2 = html.unescape(self.current_question.choices[0])
+        q_o3 = html.unescape(self.current_question.choices[1])
+        q_o4 = html.unescape(self.current_question.choices[2])
+        return f"Q.{self.question_number}: {q_text}", f"{q_o1}", [f"{q_o2}", f"{q_o3}", f"{q_o4}"]
 
+    def mc_check_answer(self, user_answer):
+        correct_answer = self.current_question.answer
+        if user_answer.lower() == correct_answer.lower():
+            self.score += 1
+            return True
+            # print("You got it right!")
+        else:
+            return False
     def check_answer(self, user_answer):
         correct_answer = self.current_question.answer
         if user_answer.lower() == correct_answer.lower():
             self.score += 1
-            print("You got it right!")
+            return True
+            # print("You got it right!")
         else:
-            print("That's wrong.")
-
-        print(f"Your current score is: {self.score}/{self.question_number}")
-        print("\n")
+            return False
+            # print("That's wrong.")
+        #
+        # print(f"Your current score is: {self.score}/{self.question_number}")
+        # print("\n")
